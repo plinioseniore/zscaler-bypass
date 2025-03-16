@@ -12,7 +12,7 @@ The product is composed of two main features called ZIA (ZScaler Internet Access
 
 This module replace the needs of a VPN to access local resources, it use the same approach of a VPN with a tunnelled traffic to the target resource but it doesn't involve a virtual adapter like a standard VPN. Once a request to a local resource is identified, that request only is redirected in the ZPA tunnel.
 
-It could seems an always on VPN with specific enforced routes, but at least at user level you don't see your routing table altered. The whole ZCC (ZScaler Client Connector, that runs ZIA and ZPA on your end device) acts on a lower level than your TCP/IP stack on Windows. It use a [Windows Filter](https://help.zscaler.com/zscaler-client-connector/using-windows-filter-driver-zscaler-client-connector) attached to the network adapters to redirect the traffic to the ZCC and take actions. Detaching the Windows Filter from the adapter will make the ZCC useless, but it shall be considered a [tampering](https://www.reddit.com/r/techsupport/comments/xm2jng/disable_zscaler_startup_only_launch_it_when/?rdt=37143) of the device.
+It could seems an always on VPN with specific enforced routes, but at least at user level you don't see your routing table altered. The whole ZCC (ZScaler Client Connector, that runs ZIA and ZPA on your end device) acts on a lower level than your TCP/IP stack on Windows. It use a [Windows Filter](https://help.zscaler.com/zscaler-client-connector/using-windows-filter-driver-zscaler-client-connector) attached to the network adapters to redirect the traffic to the ZCC and take actions. 
 
 When a VPN is setup the ZPA disable itself automatically, as this overlap the VPN features. This assume that the VPN you are using give you access to same resources accessible via ZPA, even if this is not true in case of VPN to connect to a customer site rather than your employer one.
 
@@ -51,7 +51,7 @@ Using an SSH Client like Putty or others, the connection to an SSH Server and a 
 
 One nice thing to observe is that ZCC observe the routing table, so if you have a VPN that establish a connection before ZCC, the ZCC connection to the ZScaler Edge will go though the VPN. If the firewall in the VPN blocks the traffic to the ZScaler Edge, this will completely disable the ZScaler protection.
 
-### Local Proxy
+### Proxy
 
 A local proxy used to redirect the traffic can be on the local network or on the device itself, if is allowed to run a Virtual Machine with a bridged interface. The traffic via the bridged interface cannot be intercepted by ZScaler.
 
@@ -61,12 +61,14 @@ This is untested but likely to work, a virtual interface with a public IP addres
 
 If that traffic is not redirected via ZIA because is seen by the Operating System as local traffic, that interface can be used to run a local proxy even with restriction of local addresses.
 
+### Detaching the Windows Filter from the interfaces
+Detaching the Windows Filter from the adapter will make the ZCC [useless](https://www.reddit.com/r/techsupport/comments/xm2jng/disable_zscaler_startup_only_launch_it_when/?rdt=37143).
+
 ## Trusted Network
 
 The definition of Trusted Network can use multiple logics but the most common one is to check the DNS Name Server. In this case having changing the DNS Name in your router will let ZScaler Client define the network as Trusted.
 
-The logics that can be used to define a Trusted Network are provided in the ZScaler manual
-https://help.zscaler.com/zscaler-client-connector/configuring-forwarding-profiles-zscaler-client-connector
+The logics that can be used to define a Trusted Network are provided in the [ZScaler manual](https://help.zscaler.com/zscaler-client-connector/configuring-forwarding-profiles-zscaler-client-connector).
 
 Based on the network type (Trusted, VPN Trusted, VPN Split Channel and Off-Trusted) different forwarding profiles can be enforced and this can change the ZCC behavior.
 

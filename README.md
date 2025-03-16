@@ -12,7 +12,7 @@ The product is composed of two main features called ZIA (ZScaler Internet Access
 
 This module replace the needs of a VPN to access local resources, it use the same approach of a VPN with a tunnelled traffic to the target resource but it doesn't involve a virtual adapter like a standard VPN. Once a request to a local resource is identified, that request only is redirected in the ZPA tunnel.
 
-It could seems an always on VPN with specific enforced routes, but at least at user level you don't see your routing table altered. The whole ZCC (ZScaler Client Connector, that runs ZIA and ZPA on your end device) acts on a lower level than your TCP/IP stack on Windows.
+It could seems an always on VPN with specific enforced routes, but at least at user level you don't see your routing table altered. The whole ZCC (ZScaler Client Connector, that runs ZIA and ZPA on your end device) acts on a lower level than your TCP/IP stack on Windows. It use a [Windows Filter](https://help.zscaler.com/zscaler-client-connector/using-windows-filter-driver-zscaler-client-connector) attached to the network adapters to redirect the traffic to the ZCC and take actions. Detaching the Windows Filter from the adapter will make the ZCC useless, but it shall be considered a [tampering](https://www.reddit.com/r/techsupport/comments/xm2jng/disable_zscaler_startup_only_launch_it_when/?rdt=37143) of the device.
 
 When a VPN is setup the ZPA disable itself automatically, as this overlap the VPN features. This assume that the VPN you are using give you access to same resources accessible via ZPA, even if this is not true in case of VPN to connect to a customer site rather than your employer one.
 
